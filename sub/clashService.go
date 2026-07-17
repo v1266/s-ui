@@ -296,14 +296,15 @@ func (s *ClashService) ConvertToClashMeta(outbounds *[]map[string]interface{}, b
 					wsOpts["path"] = path
 				}
 				wsHeaders := make(map[string]interface{})
+				// Only the Host header is carried into Clash
 				if headers, ok := transport["headers"].(map[string]interface{}); ok {
-					for k, v := range headers {
+					if v, ok := headers["Host"]; ok {
 						if arr, ok := v.([]interface{}); ok {
 							if len(arr) > 0 {
-								wsHeaders[k] = arr[0]
+								wsHeaders["Host"] = arr[0]
 							}
 						} else {
-							wsHeaders[k] = v
+							wsHeaders["Host"] = v
 						}
 					}
 				}
